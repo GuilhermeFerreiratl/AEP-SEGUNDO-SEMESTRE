@@ -1,0 +1,236 @@
+#include <iostream>
+#include <string>
+#include <locale.h>
+using namespace std;
+
+const int MAX = 100;
+int total = 0;
+
+int id[100];
+string nome[100];
+int idade[100];
+string escola[100];
+string cidade[100];
+string restricao[100];
+int temTEA[100]; // 1=Sim 0=Nao
+int precisaAcomp[100];
+int temAcomp[100];
+
+void mostrarAluno(int i) {
+    cout << "ID:" << id[i] << " | " << nome[i] << " (" << idade[i] << " anos)\n";
+    cout << " Escola:" << escola[i] << " | Cidade:" << cidade[i] << "\n";
+    cout << " Restricao: " << restricao[i] << " | TEA:";
+    if (temTEA[i] == 1) cout << " SIM"; else cout << " NAO";
+    if (temTEA[i] == 1) {
+        cout << " | Precisa Acomp:";
+        if (precisaAcomp[i] == 1) cout << " SIM"; else cout << " NAO";
+        cout << " | Tem Acomp:";
+        if (temAcomp[i] == 1) cout << " SIM"; else cout << " NAO";
+    }
+    cout << "\n----------------------------------------\n";
+}
+
+int lerInt(string msg) {
+    int v;
+    cout << msg;
+    cin >> v;
+    cin.ignore(); // limpa o ENTER
+    return v;
+}
+
+string lerTexto(string msg) {
+    string s;
+    cout << msg;
+    getline(cin, s);
+    return s;
+}
+
+void cadastrar() {
+    if (total >= MAX) {
+        cout << "Limite atingido!\n";
+        return;
+    }
+    system("cls");
+    cout << "\n--- CADASTRAR ALUNO PSE ---\n";
+    id[total] = total + 1;
+
+    nome[total] = lerTexto("Nome: ");
+    idade[total] = lerInt("Idade: ");
+    escola[total] = lerTexto("Escola: ");
+    cidade[total] = lerTexto("Cidade: ");
+
+    // 1o PERGUNTA: TEM TEA?
+    cout << "\nTem TEA? (1-Sim 0-Nao): ";
+    cin >> temTEA[total];
+    cin.ignore();
+
+    if (temTEA[total] == 1) {
+        // TEM TEA -> pergunta o resto
+        restricao[total] = lerTexto("Tem restricao alimentar? Qual? (ou 'Nenhuma'): ");
+        precisaAcomp[total] = lerInt("Precisa de acompanhamento? (1-Sim 0-Nao): ");
+        if (precisaAcomp[total] == 1) {
+            temAcomp[total] = lerInt("Ta tendo acompanhamento? (1-Sim 0-Nao): ");
+        } else {
+            temAcomp[total] = 0;
+        }
+    } else {
+        // NAO TEM TEA -> ja sabe que e pessoa com restricao
+        cout << "Entao e aluno com restricao alimentar.\n";
+        restricao[total] = lerTexto("Qual alimento? (ex: lactose, gluten, amendoim): ");
+        precisaAcomp[total] = 0;
+        temAcomp[total] = 0;
+    }
+
+    total++;
+    cout << "\nAluno cadastrado com ID " << id[total-1] << "!\n";
+}
+
+void listar() {
+    cout << "\n===== RELATORIO GERAL =====\n";
+    if (total == 0) {
+        cout << "Nenhum aluno cadastrado.\n";
+        return;
+    }
+    for (int i = 0; i < total; i++) {
+        mostrarAluno(i);
+    }
+}
+
+void menuRelatorios() {
+    int opR = -1;
+    do {
+        system("cls");
+        cout << "\n===== MENU DE RELATORIOS =====\n";
+        cout << "1 - Relatorio Geral (Todos)\n";
+        cout << "2 - So criancas com TEA\n";
+        cout << "3 - So Restricao Alimentar\n";
+        cout << "4 - TEA + Restricao juntos\n";
+        cout << "5 - Relatorio por Escola\n";
+        cout << "6 - Relatorio por Cidade\n";
+        cout << "7 - Filtrar por TEA / Restricao DENTRO de uma Escola\n";
+        cout << "8 - Filtrar por tipo de Restricao (lactose, gluten...)\n";
+        cout << "9 - Relatorio Cantina\n";
+        cout << "10 - Precisa mas NAO tem Acompanhante\n";
+        cout << "0 - Voltar ao menu principal\n";
+        cout << "Escolha qual relatorio: ";
+        cin >> opR;
+        cin.ignore();
+
+        int c = 0;
+        string busca;
+        switch (opR) {
+            case 1: listar(); break;
+            case 2:
+                cout << "\n===== SO TEA =====\n";
+                for (int i = 0; i < total; i++) if (temTEA[i] == 1) { mostrarAluno(i); c++; }
+                cout << "Total com TEA: " << c << "\n";
+                break;
+            case 3:
+                cout << "\n===== SO RESTRICAO =====\n";
+                for (int i = 0; i < total; i++) if (restricao[i] != "Nenhuma" && restricao[i] != "nenhuma" && restricao[i] != "") { mostrarAluno(i); c++; }
+                cout << "Total com restricao: " << c << "\n";
+                break;
+            case 4:
+                cout << "\n===== TEA + RESTRICAO =====\n";
+                for (int i = 0; i < total; i++) if (temTEA[i] == 1 && restricao[i] != "Nenhuma" && restricao[i] != "nenhuma" && restricao[i] != "") { mostrarAluno(i); c++; }
+                cout << "Total: " << c << "\n";
+                break;
+            case 5:
+                busca = lerTexto("Digite a escola: ");
+                cout << "\n===== ALUNOS DA ESCOLA: " << busca << " =====\n";
+                for (int i = 0; i < total; i++) if (escola[i] == busca) { mostrarAluno(i); c++; }
+                cout << "Total nessa escola: " << c << "\n";
+                break;
+            case 6:
+                busca = lerTexto("Digite a cidade: ");
+                cout << "\n===== ALUNOS DA CIDADE: " << busca << " =====\n";
+                for (int i = 0; i < total; i++) if (cidade[i] == busca) { mostrarAluno(i); c++; }
+                cout << "Total nessa cidade: " << c << "\n";
+                break;
+            case 7: {
+                string esc2 = lerTexto("Digite a escola: ");
+                cout << "Filtrar nessa escola por:\n1 - So TEA\n2 - So Restricao\n3 - TEA + Restricao\n4 - Todos da escola\nEscolha: ";
+                int tipo; cin >> tipo; cin.ignore();
+                cout << "\n===== FILTRO - " << esc2 << " =====\n";
+                for (int i = 0; i < total; i++) if (escola[i] == esc2) {
+                    bool mostra = false;
+                    if (tipo == 1 && temTEA[i] == 1) mostra = true;
+                    if (tipo == 2 && restricao[i] != "Nenhuma" && restricao[i] != "nenhuma" && restricao[i] != "") mostra = true;
+                    if (tipo == 3 && temTEA[i] == 1 && restricao[i] != "Nenhuma" && restricao[i] != "nenhuma" && restricao[i] != "") mostra = true;
+                    if (tipo == 4) mostra = true;
+                    if (mostra) { mostrarAluno(i); c++; }
+                }
+                cout << "Total: " << c << "\n";
+                break;
+            }
+            case 8:
+                busca = lerTexto("Digite a restricao (ex: lactose, gluten): ");
+                cout << "\n===== COM RESTRICAO: " << busca << " =====\n";
+                for (int i = 0; i < total; i++) if (restricao[i].find(busca) != string::npos) { mostrarAluno(i); c++; }
+                cout << "Total: " << c << "\n";
+                break;
+            case 9:
+                cout << "\n===== RELATORIO CANTINA =====\n";
+                for (int i = 0; i < total; i++) if (restricao[i] != "Nenhuma" && restricao[i] != "nenhuma" && restricao[i] != "") {
+                    cout << escola[i] << " - " << cidade[i] << " - " << nome[i] << ": " << restricao[i] << "\n";
+                }
+                break;
+            case 10:
+                cout << "\n===== PRECISA MAS NAO TEM ACOMPANHANTE =====\n";
+                for (int i = 0; i < total; i++) if (precisaAcomp[i] == 1 && temAcomp[i] == 0) { mostrarAluno(i); c++; }
+                cout << "Total em espera: " << c << "\n";
+                break;
+            case 0:
+                cout << "Voltando...\n";
+                break;
+            default:
+                cout << "Opcao invalida!\n";
+                break;
+        }
+        if (opR != 0) {
+            cout << "\nPressione ENTER para continuar...";
+            string enter; getline(cin, enter);
+        }
+    } while (opR != 0);
+}
+
+void buscar() {
+    string busca = lerTexto("Buscar nome: ");
+    int achou = 0;
+    for (int i = 0; i < total; i++) {
+        if (nome[i].find(busca) != string::npos) {
+            mostrarAluno(i);
+            achou = 1;
+        }
+    }
+    if (!achou) cout << "Nenhum aluno encontrado com '" << busca << "'.\n";
+}
+
+int main() {
+    setlocale(LC_ALL, "Portuguese");
+    int op = -1;
+    do {
+        system("cls");
+        cout << "\n===== SISTEMA PSE - ALUNOS =====\n";
+        cout << "1 - Cadastrar Aluno\n";
+        cout << "2 - Relatorios (entra e escolhe qual)\n";
+        cout << "3 - Buscar por Nome\n";
+        cout << "0 - Sair\n";
+        cout << "Escolha: ";
+        cin >> op;
+        cin.ignore();
+
+        switch (op) {
+            case 1: cadastrar(); break;
+            case 2: menuRelatorios(); break;
+            case 3: buscar(); break;
+            case 0: cout << "Saindo...\n"; break;
+            default: cout << "Opcao invalida!\n"; break;
+        }
+        if (op != 0) {
+            cout << "\nPressione ENTER para continuar...";
+            string enter; getline(cin, enter);
+        }
+    } while (op != 0);
+    return 0;
+}
