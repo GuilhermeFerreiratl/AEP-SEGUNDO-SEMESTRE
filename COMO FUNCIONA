@@ -1,0 +1,30 @@
+1. O QUE O SISTEMA FAZO Sistema PSE foi criado para ajudar a secretaria e a nutricionista a controlar os alunos do Programa Saúde na Escola.Antes o controle era feito no papel. Agora o sistema guarda em um só lugar quem tem TEA, quem tem restrição alimentar e quem precisa de acompanhamento.O sistema guarda de cada aluno: ID, Nome, Idade, Escola, Cidade, Restrição Alimentar, Tem TEA, Precisa de Acompanhamento e Tá Tendo Acompanhamento.2. MENU PRINCIPALQuando o programa é aberto, aparece o seguinte menu:===== SISTEMA PSE - ALUNOS =====
+1 - Cadastrar Aluno
+2 - Listar Todos
+3 - Buscar por Nome
+4 - Relatórios
+5 - Editar Aluno
+6 - Excluir Aluno
+0 - Sair e SalvarPara usar, basta digitar o número da opção e apertar ENTER.3. COMO FUNCIONA O CADASTROO cadastro pergunta primeiro se o aluno tem TEA, porque essa resposta decide o resto do cadastro.Passo 1: Digita o nome, a idade, a escola e a cidade.
+
+Passo 2: O sistema pergunta: Tem TEA? (1-Sim 0-Não)SE A RESPOSTA FOR SIM (TEM TEA):O sistema continua perguntando:Tem restrição alimentar? Qual? (ou Nenhuma)Precisa de acompanhamento? (1-Sim 0-Não)Se precisar, tá tendo acompanhamento? (1-Sim 0-Não)
+Exemplo: Maria, 8 anos, Escola João Paulo, Paiçandu. Tem TEA? SIM. Restrição: lactose. Precisa de acompanhamento? SIM. Tá tendo? NÃO.SE A RESPOSTA FOR NÃO (NÃO TEM TEA):O sistema já entende que esse aluno é só da restrição alimentar. Não pergunta sobre acompanhamento, porque acompanhamento é só para quem tem TEA.Ele pergunta direto:Qual alimento? (ex: lactose, gluten, amendoim)Exemplo: Pedro, 10 anos, Escola João Paulo, Paiçandu. Tem TEA? NÃO. Qual alimento? gluten. Cadastro finalizado.Esse jeito deixa o cadastro mais rápido e evita cadastrar informação errada.4. RELATÓRIOS (OPÇÃO 4)Todos os relatórios ficam dentro da opção 4. Ao entrar, o usuário escolhe qual relatório precisa:
+
+1 - Relatorio Geral (Todos)
+2 - So criancas com TEA
+3 - So Restricao Alimentar
+4 - TEA + Restricao juntos
+5 - Relatorio por Escola
+6 - Relatorio por Cidade
+7 - Filtrar por TEA / Restricao DENTRO de uma Escola
+8 - Filtrar por tipo de Restricao (lactose, gluten...)
+9 - Relatorio Cantina
+10 - Precisa mas NAO tem Acompanhante
+0 - Voltar ao menu principalExemplos de uso:Relatório Só TEA: para a direção saber quantos alunos com TEA existem.Relatório por Escola: para a diretora ver só os alunos da sua escola.Relatório por Cidade: para a prefeitura ver só os alunos de Paiçandu.Relatório Cantina: para a merendeira saber o que não pode servir. Mostra: Escola - Cidade - Nome: Alimento.Relatório Precisa mas NÃO tem Acompanhante: mostra a lista de espera para contratar acompanhante.5. OUTRAS OPÇÕES DO MENU2 - Listar Todos: mostra todos os alunos cadastrados.
+3 - Buscar por Nome: digita parte do nome e o sistema mostra o aluno.
+5 - Editar Aluno: digita o ID, muda a restrição ou se começou a ter acompanhamento.
+6 - Excluir Aluno: digita o ID e o aluno é retirado da lista.
+0 - Sair e Salvar: salva tudo e fecha o programa.6. VALIDAÇÕESO sistema não deixa cadastrar errado:Nome vazio não é aceito. Se apertar ENTER sem digitar, o sistema pede de novo.Idade entre 3 e 18 anos. Se digitar fora desse intervalo, o sistema pede de novo.TEA e Acompanhamento só aceitam 0 ou 1. Se digitar outro número, o sistema pede de novo.Aviso de nome duplicado. Se já existe um aluno com o mesmo nome, o sistema avisa e pergunta se deseja continuar.Mensagem Registro inexistente. Se buscar, editar ou excluir um ID que não existe, o sistema mostra essa mensagem.Limite de 100 alunos. Ao atingir 100 alunos, o sistema mostra Limite atingido e não deixa cadastrar mais.7. ARQUIVOS DO SISTEMAmain.c - Código-fonte completo. É o arquivo aberto no Dev-C++.
+alunos_pse.dat - Arquivo criado automaticamente ao salvar. Guarda todos os alunos mesmo depois que o programa é fechado.8. COMO COMPILAR E EXECUTARNo Dev-C++:Abrir o Dev-C++.Arquivo > Novo > Arquivo Fonte.Colar o código e salvar como pse.cpp.Apertar F11 para Compilar e Executar.9. CONSIDERAÇÕES FINAISO sistema funciona, salva os dados e gera todos os relatórios pedidos.
+Limitações: máximo de 100 alunos, sem login e senha, funciona só no terminal.
+Melhorias futuras: exportar para Excel, criar login, fazer interface gráfica e usar banco de dados.
